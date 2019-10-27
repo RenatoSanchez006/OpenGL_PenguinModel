@@ -12,6 +12,11 @@ void specialKeys();
 // Global Variables
 double rotate_y = 0;
 double rotate_x = 0;
+double rotate_z = 0;
+double translate_x = 0;
+double translate_y = 0;
+double translate_z = 0;
+double scale = 1;
 
 int main(int argc, char *argv[])
 {
@@ -26,7 +31,7 @@ int main(int argc, char *argv[])
 	glutInitWindowPosition(0, 0); // Position the window's initial top-left corner
 
 	// Create window
-	glutCreateWindow("Awesome Cube");
+	glutCreateWindow("Penguin Model - A01281104");
 
 	//  Enable Z-buffer depth test
 	glEnable(GL_DEPTH_TEST);
@@ -44,7 +49,6 @@ int main(int argc, char *argv[])
 
 void display()
 {
-
 	//  Clear screen and Z-buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -54,14 +58,13 @@ void display()
 	// Rotate when user changes rotate_x and rotate_y
 	glRotatef(rotate_x, 1.0, 0.0, 0.0);
 	glRotatef(rotate_y, 0.0, 1.0, 0.0);
+	glRotatef(rotate_z, 0.0, 0.0, 1.0);
 
-	/* // TRASLADAR FIGURA 0.2 EN X Y Z
-	glTranslatef(0.2, 0.0, 0.0);
-	glTranslatef(0.0, 0.2, 0.0);
-	glTranslatef(0.0, 0.0, 0.2);  */
+	// Translate FIGURE
+	glTranslatef(translate_x, translate_y, translate_z);
 
-	/* // ESCALAR FIGURA EN .5 EN X Y Z
-	glScalef(.5, .5, .5); */
+	// Scale FIGURE
+	glScalef(scale, scale, scale);
 
 	glBegin(GL_LINES);
 	// X AXIS
@@ -529,19 +532,52 @@ void display()
 
 void specialKeys(int key, int x, int y)
 {
-	//  Right arrow - increase rotation by 5 degree
-	if (key == GLUT_KEY_RIGHT)
-		rotate_y += 10;
-
-	//  Left arrow - decrease rotation by 5 degree
-	else if (key == GLUT_KEY_LEFT)
-		rotate_y -= 10;
-
-	else if (key == GLUT_KEY_UP)
-		rotate_x += 10;
-
-	else if (key == GLUT_KEY_DOWN)
-		rotate_x -= 10;
+	// Read keyboard to make transformations
+	switch (key)
+	{
+		case GLUT_KEY_RIGHT: 
+			rotate_y += 9;
+			break;
+		case GLUT_KEY_LEFT: 
+			rotate_y -= 9;
+			break;
+		case GLUT_KEY_UP: 
+			rotate_x += 9;
+			break;
+		case GLUT_KEY_DOWN: 
+			rotate_x -= 9;
+			break;
+		case (GLUT_KEY_PAGE_UP): 
+			rotate_z += 9;
+			break;
+		case GLUT_KEY_PAGE_DOWN: 
+			rotate_z -= 9;
+			break;
+		case GLUT_KEY_F1: 
+			translate_x -= .05;
+			break;
+		case GLUT_KEY_F2: 
+			translate_x += .05;
+			break;
+		case GLUT_KEY_F3: 
+			translate_y -= .05;
+			break;
+		case GLUT_KEY_F4: 
+			translate_y += .05;
+			break;
+		case (GLUT_KEY_F5): 
+			translate_z += .05;
+			break;
+		case GLUT_KEY_F6: 
+			translate_z -= .05;
+			break;
+		case GLUT_KEY_HOME:
+			scale -= .05;
+			break;
+		case GLUT_KEY_END:
+			scale += .05;
+			break;
+	}
 
 	//  Request display update
 	glutPostRedisplay();

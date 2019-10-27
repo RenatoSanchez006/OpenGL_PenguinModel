@@ -1,7 +1,8 @@
 Computer Graphics
 Profa. Raquel Landa
-Rento Sánchez Nevares
+Renato Sánchez Nevares
 A01281104
-Septiembre 28, 2019
+v1.0 September 28, 2019 - Model 
+v1.1 October 26, 2019 - Transformations 
 
 RUN THE BASH TO COMPIfLE AND RUN THE OPENGL MODEL

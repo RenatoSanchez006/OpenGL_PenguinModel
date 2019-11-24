@@ -31,36 +31,6 @@ double scale = 1;
 static GLubyte textureImage[textureHeight][textureWidth][4];
 int width, height, colours;
 
-int main(int argc, char *argv[])
-{
-
-	//  Initialize GLUT and process user parameters
-	glutInit(&argc, argv);
-
-	//  Request double buffered true color window with Z-buffer
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-
-	glutInitWindowSize(640, 680); // Set the window's initial width & height
-	glutInitWindowPosition(0, 0); // Position the window's initial top-left corner
-
-	// Create window
-	glutCreateWindow("Penguin Model - A01281104");
-
-	//  Enable Z-buffer depth test
-	glEnable(GL_DEPTH_TEST);
-
-	init();
-	// Callback functions
-	glutDisplayFunc(display);
-	glutKeyboardFunc(keyboard);
-
-	//  Pass control to GLUT for events
-	glutMainLoop();
-
-	//  Return to OS
-	return 0;
-}
-
 void display(void)
 {
 	//  Clear screen and Z-buffer
@@ -68,12 +38,6 @@ void display(void)
 
 	// Reset transformations
 	glLoadIdentity();
-
-	// gluLookAt(0.0f, 0.0f, 5.0f,
-	// 		  0.0f, 0.0f, 0.0f,
-	// 		  0.0f, 1.0f, 0.0f);
-
-	glEnable(GL_TEXTURE_2D);
 
 	// Rotate when user changes rotate_x and rotate_y
 	glRotatef(rotate_x, 1.0, 0.0, 0.0);
@@ -102,6 +66,7 @@ void display(void)
 	glEnd(); */
 
 	glColor3f(0.97, 0.97, 0.98); // white
+	glEnable(GL_TEXTURE_2D);
 	float bodyVertices [] = {
 		// FRONT
 		0.4, -.7, -0.3,
@@ -126,12 +91,11 @@ void display(void)
 	};
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	// glEnable(GL_TEXTURE_2D);
 	glVertexPointer(3, GL_FLOAT, 0, bodyVertices);
 	glDrawArrays(GL_QUADS, 0, 16);
-	// glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	
+	glDisable(GL_TEXTURE_2D);
+
 	float ojoIzqVertices [] = {
 		// Ojo izq front
 		-0.4, 0.4, -0.15,
@@ -551,7 +515,6 @@ void display(void)
 	glDrawArrays(GL_QUADS, 0, 24);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
-	glDisable(GL_TEXTURE_2D);
 	glFlush();
 	glutSwapBuffers();
 }
@@ -587,41 +550,28 @@ void makeTexture(void)
 	}
 
 	inFile >> keyword;
-	//    cout << keyword << " ";
-	inFile >> comment;
-	//    cout << comment << " ";
-	inFile >> comment;
-	//    cout << comment << " ";
-	inFile >> comment;
-	cout << comment << " ";
 	inFile >> comment;
 	inFile >> comment;
-	//    cout << comment << " ";
+	inFile >> comment;
+	inFile >> comment;
+	inFile >> comment;
 
 	inFile >> width;
-	//    cout << width;
 	inFile >> height;
-	//    cout << height << "\n";
 	inFile >> colours;
-	//    cout << colours;
-	//    cout << endl;
+
 	for (i = 0; i < height; i++)
 	{
 		for (j = 0; j < width; j++)
 		{
 			inFile >> c;
 			textureImage[height - i][j][0] = (GLubyte)c;
-			//cout << c << " ";
 			inFile >> c;
 			textureImage[height - i][j][1] = (GLubyte)c;
-			//cout << c << " ";
 			inFile >> c;
 			textureImage[height - i][j][2] = (GLubyte)c;
-			//cout << c << " ";
 			textureImage[height - i][j][3] = (GLubyte)255;
-			//cout << "255n";
 		}
-		//cout << endl;
 	}
 	inFile.close();
 }
@@ -696,4 +646,34 @@ void keyboard(unsigned char key, int x, int y)
 
 	//  Request display update
 	glutPostRedisplay();
+}
+
+int main(int argc, char **argv)
+{
+	//  Initialize GLUT and process user parameters
+	glutInit(&argc, argv);
+
+	//  Request double buffered true color window with Z-buffer
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+
+	glutInitWindowSize(640, 680); // Set the window's initial width & height
+	glutInitWindowPosition(0, 0); // Position the window's initial top-left corner
+
+	// Create window
+	glutCreateWindow("Penguin Model - A01281104");
+
+	//  Enable Z-buffer depth test
+	glEnable(GL_DEPTH_TEST);
+
+	init();
+
+	// Callback functions
+	glutDisplayFunc(display);
+	glutKeyboardFunc(keyboard);
+
+	//  Pass control to GLUT for events
+	glutMainLoop();
+
+	//  Return to OS
+	return 0;
 }

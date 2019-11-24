@@ -568,36 +568,36 @@ void makeTexture()
 		exit(1); // terminate with error
 	}
 
-	fscanf(keyword, "%d");
+	fscanf(infile, "%s", keyword);
 	//    cout << keyword << " ";
-	fscanf(comment, "%d");
+	fscanf(infile, "%s", comment);
 	//    cout << comment << " ";
-	fscanf(comment, "%d");
+	fscanf(infile, "%s", comment);
 	//    cout << comment << " ";
-	fscanf(comment, "%d");
+	fscanf(infile, "%s", comment);
 	// cout << comment << " ";
-	fscanf(comment, "%d");
-	fscanf(comment, "%d");
+	fscanf(infile, "%s", comment);
+	fscanf(infile, "%s", comment);
 	//    cout << comment << " ";
 
-	fscanf(width, "%d");
+	fscanf(infile, "%d", width);
 	//    cout << width;
-	fscanf(height, "%d");
+	fscanf(infile, "%d", height);
 	//    cout << height << "\n";
-	fscanf(colours, "%d");
+	fscanf(infile, "%d", colours);
 	//    cout << colours;
 	//    cout << endl;
 	for (i = 0; i < height; i++)
 	{
 		for (j = 0; j < width; j++)
 		{
-			fscanf(c, "%d");
+			fscanf(infile, "%d", c);
 			textureImage[height - i][j][0] = (GLubyte)c;
 			//cout << c << " ";
-			fscanf(c, "%d");
+			fscanf(infile, "%d", c);
 			textureImage[height - i][j][1] = (GLubyte)c;
 			//cout << c << " ";
-			fscanf(c, "%d");
+			fscanf(infile, "%d", c);
 			textureImage[height - i][j][2] = (GLubyte)c;
 			//cout << c << " ";
 			textureImage[height - i][j][3] = (GLubyte)255;

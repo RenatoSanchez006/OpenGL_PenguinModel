@@ -7,6 +7,11 @@
 #include <stdio.h>
 #include <GLUT/glut.h>
 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+using namespace std;
+
 // Function Prototypes
 void display();
 void keyboard(unsigned char key, int x, int y);
@@ -56,13 +61,19 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-void display()
+void display(void)
 {
 	//  Clear screen and Z-buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Reset transformations
 	glLoadIdentity();
+
+	// gluLookAt(0.0f, 0.0f, 5.0f,
+	// 		  0.0f, 0.0f, 0.0f,
+	// 		  0.0f, 1.0f, 0.0f);
+
+	glEnable(GL_TEXTURE_2D);
 
 	// Rotate when user changes rotate_x and rotate_y
 	glRotatef(rotate_x, 1.0, 0.0, 0.0);
@@ -74,8 +85,6 @@ void display()
 
 	// Scale FIGURE
 	glScalef(scale, scale, scale);
-
-	glEnable(GL_TEXTURE_2D);
 
 	/* glBegin(GL_LINES);
 	// X AXIS
@@ -117,8 +126,10 @@ void display()
 	};
 
 	glEnableClientState(GL_VERTEX_ARRAY);
+	// glEnable(GL_TEXTURE_2D);
 	glVertexPointer(3, GL_FLOAT, 0, bodyVertices);
 	glDrawArrays(GL_QUADS, 0, 16);
+	// glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
 	float ojoIzqVertices [] = {
@@ -401,10 +412,12 @@ void display()
 		-0.08, 0.40, -0.55,
 	};
 
+	// glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, noseVertices);
-	glDrawArrays(GL_QUADS, 0, 16);
+	glDrawArrays(GL_QUADS, 0, 20);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	// glDisable(GL_TEXTURE_2D);
 	
 	float patDerVertices [] = {
 		// PATA front
@@ -538,66 +551,71 @@ void display()
 	glDrawArrays(GL_QUADS, 0, 24);
 	glDisableClientState(GL_VERTEX_ARRAY);
 
+	glDisable(GL_TEXTURE_2D);
 	glFlush();
 	glutSwapBuffers();
 }
 
-void init()
+void init(void)
 {
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glEnable(GL_DEPTH_TEST);
 	makeTexture();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureImage);
+	glDepthFunc(GL_LEQUAL);
+	glClearDepth(1.0f);
+
+	glFlush();
+	glutSwapBuffers();
 }
 
-void makeTexture()
+void makeTexture(void)
 {
 	int i, j, c;
 	char keyword[2];
-	char comment[] = "";
+	string comment;
 
 	//Reading texture file
-	FILE *infile;
-	// ifstream inFile;
+	ifstream inFile;
 
-	infile = fopen("test.ppm", "r");
-	// inFile.open("test.ppm");
-	if (!infile)
+	inFile.open("test.ppm");
+	if (!inFile)
 	{
-		printf("Unable to open file ");
+		cout << "Unable to open file ";
 		exit(1); // terminate with error
 	}
 
-	fscanf(keyword, "%d");
+	inFile >> keyword;
 	//    cout << keyword << " ";
-	fscanf(comment, "%d");
+	inFile >> comment;
 	//    cout << comment << " ";
-	fscanf(comment, "%d");
+	inFile >> comment;
 	//    cout << comment << " ";
-	fscanf(comment, "%d");
-	// cout << comment << " ";
-	fscanf(comment, "%d");
-	fscanf(comment, "%d");
+	inFile >> comment;
+	cout << comment << " ";
+	inFile >> comment;
+	inFile >> comment;
 	//    cout << comment << " ";
 
-	fscanf(width, "%d");
+	inFile >> width;
 	//    cout << width;
-	fscanf(height, "%d");
+	inFile >> height;
 	//    cout << height << "\n";
-	fscanf(colours, "%d");
+	inFile >> colours;
 	//    cout << colours;
 	//    cout << endl;
 	for (i = 0; i < height; i++)
 	{
 		for (j = 0; j < width; j++)
 		{
-			fscanf(c, "%d");
+			inFile >> c;
 			textureImage[height - i][j][0] = (GLubyte)c;
 			//cout << c << " ";
-			fscanf(c, "%d");
+			inFile >> c;
 			textureImage[height - i][j][1] = (GLubyte)c;
 			//cout << c << " ";
-			fscanf(c, "%d");
+			inFile >> c;
 			textureImage[height - i][j][2] = (GLubyte)c;
 			//cout << c << " ";
 			textureImage[height - i][j][3] = (GLubyte)255;
@@ -605,8 +623,7 @@ void makeTexture()
 		}
 		//cout << endl;
 	}
-	// inFile.close();
-	fclose(infile);
+	inFile.close();
 }
 
 void keyboard(unsigned char key, int x, int y)
